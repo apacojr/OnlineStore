@@ -19,21 +19,28 @@ namespace OnlineStore.WebUI.Controllers
         }
 
         // GET: Product
-        public ActionResult List( int page = 1)
+        public ActionResult List(string category, int page = 1)
         {
-            var model = new ProductListViewModel();
+            var model = new ProductListViewModel
             {
-                 model.Products = _repository.Products
-                                    .OrderBy(x => x.ProductId)
-                                    .Skip((page - 1) * PageSize)
-                                    .Take(PageSize);
-                 model.PagingInfo = new PagingInfo()
+                Products = _repository.Products
+                    .Where(p => category == null || p.Category == category)
+                    .OrderBy(x => x.ProductId)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize),
+
+                PagingInfo = new PagingInfo()
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = _repository.Products.Count()
-                };
-            }
+                    TotalItems =  category == null?
+                    _repository.Products.Count():
+                    _repository.Products.Count(p => p.Category == category)
+                },
+
+                CurrentCategory = category
+
+            };
 
 
             return View(model);

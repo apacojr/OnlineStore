@@ -13,7 +13,9 @@
     <a class="navbar-brand" href="#">Online Store</a>
 </div>
 <div class="row panel">
-    <div id="categoris" class="col-lg-3"> Categories</div>
+    <div id="categoris" class="col-lg-3">
+        @Html.Action("Menu", "Nav");
+    </div>
     <div class="col-lg-7">@RenderBody()</div>
 </div>
    
